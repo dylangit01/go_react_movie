@@ -9,7 +9,6 @@ const Categories = () => {
 	return (
 		<div>
 			<h2>Category</h2>
-
 			<ul>
 				<li><Link to={`${path}/comedy`}>Comedy</Link></li>
 				<li><Link to={`${url}/drama`}>drama</Link></li>

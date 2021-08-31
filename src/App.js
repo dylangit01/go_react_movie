@@ -41,21 +41,18 @@ export default function App() {
 							<Route exact path='/categories'>
 								<Categories />
 							</Route>
-
 							<Route exact path='/categories/drama'>
 								<Category title={`Drama`} />
 							</Route>
-
 							<Route exact path='/categories/comedy'>
 								<Category title={`Comedy`} />
-							</Route>
-
-							<Route exact path='/movies/:id'>
-								<Movie />
-							</Route>
+              </Route>
 							<Route exact path='/movies'>
 								<Movies />
-							</Route>
+              </Route>
+              
+              <Route exact path='/movies/:id' render={(props) => <Movie {...props} />} />
+              
 							<Route exact path='/admin'>
 								<Admin />
 							</Route>
