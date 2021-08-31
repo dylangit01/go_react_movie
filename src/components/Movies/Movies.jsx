@@ -21,13 +21,11 @@ export class Movies extends Component {
 			<>
 				<h2>Choose a movie</h2>
 				<ul>
-					{
-						this.state.movies.map(movie => (
-							<li key={movie.id}>
-								<Link to="">{movie.title}</Link>
-							</li>
-						))
-					}
+					{this.state.movies.map((movie) => (
+						<li key={movie.id}>
+							<Link to={`/movies/${movie.id}`}>{movie.title}</Link>
+						</li>
+					))}
 				</ul>
 			</>
 		);

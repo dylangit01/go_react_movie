@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import Movies from './components/Movies/Movies';
 import Admin from './components/Admin/Admin';
 import Home from './components/Home/Home';
+import Movie from './components/Movie/Movie';
 
 export default function App() {
 	return (
@@ -31,14 +32,17 @@ export default function App() {
 					</div>
 
 					<div className='col-md-9'>
-						<Switch>
-							<Route path='/movies'>
+            <Switch>
+              <Route exact path='/movies/:id'>
+                <Movie />
+              </Route>
+							<Route exact path='/movies'>
 								<Movies />
 							</Route>
-							<Route path='/admin'>
+							<Route exact path='/admin'>
 								<Admin />
 							</Route>
-							<Route path='/'>
+							<Route exact path='/'>
 								<Home />
 							</Route>
 						</Switch>
