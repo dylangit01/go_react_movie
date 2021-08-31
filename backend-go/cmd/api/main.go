@@ -15,11 +15,12 @@ type config struct {
 		env 	string
 }
 
-// Make below struct send some formatted JSON about the current status of the server to whoever requested it
+// Make below struct send some formatted JSON about the current info of the server to whoever requested it
+// Also, if we want to change the capital words to lowercase, we can add backtic 
 type AppStatus struct {
-	Status 			string
-	Environment string
-	Version 		string
+	Status 			string `json:"status"`
+	Environment string `json:"environment"`
+	Version 		string `json:"version"`
 }
 
 func main() {
