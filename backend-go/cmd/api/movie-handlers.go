@@ -16,9 +16,14 @@ import (
 func (app *application) getOneMovie(w http.ResponseWriter, r *http.Request) {
 	// params is similar like node.js: req.body.params
 	params := httprouter.ParamsFromContext(r.Context())
+
+	// Below express is used to see if the params can be converted to int, if not, meaning it has err, so using errorJSON func to handle the error and return nother
 	id, err := strconv.Atoi(params.ByName("id"))
+	
 	if err != nil {
 		app.logger.Print(errors.New("invalid id parameter"))
+		app.errorJSON(w, err)
+		return
 	}
 
 	app.logger.Println("id is", id)
