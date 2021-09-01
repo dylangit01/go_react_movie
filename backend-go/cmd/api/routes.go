@@ -17,7 +17,13 @@ import (
 func (app *application) routes() *httprouter.Router {
 	router := httprouter.New()
 
+	// Since statusHandler has the application receiver, so in here, we can use app.statusHandler directly, same for below other handlers
 	router.HandlerFunc(http.MethodGet, "/status", app.statusHandler)
+
+	// "/v1/" is the convention that if it introduces a breaking change, typically you would go from version one to version two and so on
+	router.HandlerFunc(http.MethodGet, "/v1/movie/:id", app.getOneMovie)
+	
+	router.HandlerFunc(http.MethodGet, "/v1/movies", app.getAllMovies)
 
 	return router
 }
