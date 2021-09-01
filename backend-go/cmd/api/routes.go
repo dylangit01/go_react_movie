@@ -1,0 +1,23 @@
+package main
+
+import (
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+	// HttpRouter is a lightweight high performance HTTP request router (also called multiplexer or just mux for short) for Go.
+)
+
+// Similar to node.JS express, we can use other router library help Go to build up routes:
+// The main goal is to move "http.HandleFunc()" from main.go to routes.go and statusHandler.go files separately
+// In this file, we only define the router.HandlerFunc, which is the restAPI router
+// And in statusHandler.go, will write the logic details for this router
+
+// "app" is the receiver that ties to application by using pointer operator
+// so this func will have the access for application infomation
+func (app *application) routes() *httprouter.Router {
+	router := httprouter.New()
+
+	router.HandlerFunc(http.MethodGet, "/status", app.statusHandler)
+
+	return router
+}
