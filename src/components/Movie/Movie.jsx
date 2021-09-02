@@ -1,51 +1,101 @@
 // Using class component and lifecycle method:
-import React, { Component } from 'react'
+import { findByLabelText } from '@testing-library/react';
+import React, { Component } from 'react';
 
 class Movie extends Component {
-	state = { movie: {} };
+	state = {
+		movie: {},
+		isLoading: true,
+		error: null,
+	};
+
+	fetchMovie = () => {
+		fetch(`http://localhost:4000/v1/movie/${this.props.match.params.id}`)
+			.then((res) => {
+				if (res.status !== '200') {
+					const err = new Error();
+					err.message = `Invalid response code: ${res.status}`;
+					this.setState({ error: err });
+				}
+				return res.json();
+			})
+			.then((data) => {
+				this.setState(
+					{
+						movie: data.movie,
+						isLoading: false,
+					},
+					// error is optional argument
+					(error) => this.setState({ isLoading: false, error })
+				);
+			});
+	};
 
 	componentDidMount() {
-		this.setState({
-			movie: {
-				id: this.props.match.params.id,
-				title: "Some fake movie",
-				runtime: 155
-			}
-		})
+		this.fetchMovie();
 	}
 
 	render() {
-		return (
-			<div>
-				<h2>
-					Movie: {this.state.movie.title} {this.state.movie.id}
-				</h2>
-				<table className='table table-compact table-striped'>
-					<thead></thead>
-					<tbody>
-						<tr>
-							<td>
-								<strong>Title:</strong>
-							</td>
-							<td>{this.state.movie.title}</td>
-						</tr>
+		const { movie, isLoading, error } = this.state;
+		movie.genres ? (movie.genres = Object.values(movie.genres)) : (movie.genres = []);
 
-						<tr>
-							<td>
-								<strong>Run time:</strong>
-							</td>
-							<td>{this.state.movie.runtime} Minutes</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		if (error) return <h3>Error: {error.message}</h3>;
+
+		return (
+			<>
+				{isLoading ? (
+					<h3>Loading...</h3>
+				) : (
+					<div>
+						<h2>
+							Movie: {movie.title} ({movie.year})
+						</h2>
+
+						<div className='d-flex justify-content-between align-items-center'>
+							<div>
+								<small>Rating: {movie.mpaa_rating}</small>
+							</div>
+							<div>
+								{movie.genres.map((genre, i) => (
+									<span className='badge bg-secondary me-1' key={i}>
+										{genre}
+									</span>
+								))}
+							</div>
+						</div>
+						<hr />
+
+						<table className='table table-compact table-striped'>
+							<thead></thead>
+							<tbody>
+								<tr>
+									<td>
+										<strong>Title:</strong>
+									</td>
+									<td>{movie.title}</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Description:</strong>
+									</td>
+									<td>{movie.description}</td>
+								</tr>
+								<tr>
+									<td>
+										<strong>Run time:</strong>
+									</td>
+									<td>{movie.runtime} Minutes</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				)}
+			</>
 		);
 	}
 }
 
-export default Movie
-
-
+export default Movie;
 
 /*
 Using functional component and Hooks method:

@@ -8,6 +8,8 @@ export class Movies extends Component {
 		error: null,
 	};
 
+	// Async / Await method:
+
 	// fetchMovies = async () => {
 	// 	const URL = 'http://localhost:4000/v1/movies'
 	// 	try {
@@ -29,9 +31,7 @@ export class Movies extends Component {
 	// 	}
 	// };
 
-	componentDidMount() {
-		// this.fetchMovies();
-
+	fetchAllMovies = () => {
 		fetch('http://localhost:4000/v1/movies')
 			.then((res) => {
 				if (res.status !== '200') {
@@ -51,6 +51,11 @@ export class Movies extends Component {
 					(error) => this.setState({ isLoading: false, error })
 				);
 			});
+	};
+
+	componentDidMount() {
+		// this.fetchMovies();
+		this.fetchAllMovies();
 	}
 
 	render() {
