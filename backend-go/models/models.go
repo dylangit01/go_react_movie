@@ -1,9 +1,22 @@
 package models
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 // In this models file, we are going to create some types to hold single move and genre information to serve the database, and it can be imported whenever we need it
 // Then establish a single route to serve one move as Json and another route to serve a collection of movies
+
+type Models struct {
+	DB DBModel
+}
+
+func NewModels(db *sql.DB) Models {
+	return Models{
+		DB: DBModel{DB: db},
+	}
+}
 
 type Movie struct {
 	ID 					int 				 `json:"id"`
