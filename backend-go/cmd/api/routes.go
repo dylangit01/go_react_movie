@@ -14,7 +14,7 @@ import (
 
 // "app" is the receiver that ties to application by using pointer operator
 // so this func will have the access for application infomation
-func (app *application) routes() *httprouter.Router {
+func (app *application) routes() http.Handler {
 	router := httprouter.New()
 
 	// Since statusHandler has the application receiver, so in here, we can use app.statusHandler directly, same for below other handlers
@@ -25,5 +25,6 @@ func (app *application) routes() *httprouter.Router {
 	
 	router.HandlerFunc(http.MethodGet, "/v1/movies", app.getAllMovies)
 
-	return router
+	// return CORS middleware to enable all routes
+	return app.enableCORS(router)
 }
