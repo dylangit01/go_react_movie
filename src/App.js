@@ -6,6 +6,7 @@ import Home from './components/Home/Home';
 import Movie from './components/Movie/Movie';
 import Genres from './components/Genres/Genres';
 import Genre from './components/Genre/Genre';
+import EditMovie from './components/EditMovie/EditMovie';
 
 export default function App() {
 	return (
@@ -45,7 +46,7 @@ export default function App() {
 							<Route exact path='/genre/:id' render={(props) => <Genre {...props} />} />
 							<Route exact path='/movies'><Movies /></Route>
 							<Route exact path='/movies/:id' render={(props) => <Movie {...props} />} />
-							<Route exact path='/admin/add'><Admin /></Route>
+							<Route exact path='/admin'><Admin /></Route>
 							<Route exact path='/admin/add' render={(props) => <EditMovie {...props} />} />
 							<Route exact path='/'><Home /></Route>
 						</Switch>
