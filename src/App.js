@@ -30,6 +30,9 @@ export default function App() {
 									<Link to='/genres'>Genres</Link>
 								</li>
 								<li className='list-group-item'>
+									<Link to='/admin/add'>Add movie</Link>
+								</li>
+								<li className='list-group-item'>
 									<Link to='/admin'>Manage Catalogue</Link>
 								</li>
 							</ul>
@@ -38,24 +41,13 @@ export default function App() {
 
 					<div className='col-md-9'>
 						<Switch>
-							<Route exact path='/genres'>
-								<Genres />
-							</Route>
-							
+							<Route exact path='/genres'><Genres /></Route>
 							<Route exact path='/genre/:id' render={(props) => <Genre {...props} />} />
-
-							<Route exact path='/movies'>
-								<Movies />
-              </Route>
-              
-              <Route exact path='/movies/:id' render={(props) => <Movie {...props} />} />
-              
-							<Route exact path='/admin'>
-								<Admin />
-							</Route>
-							<Route exact path='/'>
-								<Home />
-							</Route>
+							<Route exact path='/movies'><Movies /></Route>
+							<Route exact path='/movies/:id' render={(props) => <Movie {...props} />} />
+							<Route exact path='/admin/add'><Admin /></Route>
+							<Route exact path='/admin/add' render={(props) => <EditMovie {...props} />} />
+							<Route exact path='/'><Home /></Route>
 						</Switch>
 					</div>
 				</div>

@@ -52,7 +52,7 @@ export default class Genres extends Component {
 									className='list-group-item list-group-item-action'
 									to={{
 										pathname: `/genre/${genre.id}`,
-										genreName: genre.genre_name,
+										genreName: genre.genre_name,		// through this way to pass props to App.js {...props}
 									}}
 								>
 									{genre.genre_name}
