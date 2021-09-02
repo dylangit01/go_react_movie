@@ -1,19 +1,27 @@
 package main
 
 import (
+	"context"
+	"database/sql"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 const version = "1.0.0"
 
+// db struct is used to connect with database, "dsn" is the connect string
 type config struct {
 		port 	int
 		env 	string
+		db struct {
+			dsn string
+		}
 }
 
 // Make below struct send some formatted JSON about the current info of the server to whoever requested it
@@ -36,11 +44,23 @@ func main() {
 		// Assume when starting this app, it will read things like the port and environment from the command line as a flag pasted to the app:
 		// "&" means store address in the config variable:
 		flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
-		flag.StringVar(&cfg.env, "env", "development", "Application environment (development | production)")
+		flag.StringVar(&cfg.env, "env", "development", "Application environment (development|production)")
+		
+		// For database config
+		flag.StringVar(&cfg.db.dsn, "dsn", "postgres://changrendu@localhost/go_movies?sslmode=disable", "Postgres connection string")
+
 		flag.Parse()
 
 		// Create logger with data and time
 		logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+
+		// For database connection logger
+		db, err := openDB(cfg)
+		if err != nil {
+			logger.Fatal(err)
+		}
+		// Once open db, always have to defer close it
+		defer db.Close()
 
 		// Create app variable
 		app := &application{
@@ -95,7 +115,7 @@ func main() {
 		}
 		logger.Println("Starting server on port", cfg.port)
 
-		err := srv.ListenAndServe()
+		err = srv.ListenAndServe()
 		if err != nil {
 			log.Println(err)
 		}
@@ -106,4 +126,21 @@ func main() {
 		b := &a
 		*b = 6
 		fmt.Println(a, *b)
+}
+
+func openDB(cfg config) (*sql.DB, error) {
+	db, err := sql.Open("postgres", cfg.db.dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	err = db.PingContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
