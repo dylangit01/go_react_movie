@@ -5,7 +5,7 @@ import Admin from './components/Admin/Admin';
 import Home from './components/Home/Home';
 import Movie from './components/Movie/Movie';
 import Genres from './components/Genres/Genres';
-import Category from './components/Category/Category';
+import Genre from './components/Genre/Genre';
 
 export default function App() {
 	return (
@@ -41,12 +41,9 @@ export default function App() {
 							<Route exact path='/genres'>
 								<Genres />
 							</Route>
-							{/* <Route exact path='/categories/drama'>
-								<Category title={`Drama`} />
-							</Route>
-							<Route exact path='/categories/comedy'>
-								<Category title={`Comedy`} />
-              </Route> */}
+							
+							<Route exact path='/genre/:id' render={(props) => <Genre {...props} />} />
+
 							<Route exact path='/movies'>
 								<Movies />
               </Route>
