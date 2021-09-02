@@ -6,6 +6,7 @@ export default class Genre extends Component {
 		movies: [],
 		isLoading: true,
 		error: null,
+		genreName: ""
 	};
 
 	fetchAllMovies = () => {
@@ -23,6 +24,7 @@ export default class Genre extends Component {
 					{
 						movies: data.movies,
 						isLoading: false,
+						genreName: this.props.location.genreName
 					},
 					// error is optional argument
 					(error) => this.setState({ isLoading: false, error })
@@ -35,7 +37,7 @@ export default class Genre extends Component {
 	}
 
 	render() {
-		let { movies, isLoading, error } = this.state;
+		let { movies, isLoading, error, genreName } = this.state;
 
 		if (!movies) {
 			movies = [];
@@ -49,7 +51,7 @@ export default class Genre extends Component {
 					<h3>Fetching Movies...</h3>
 				) : (
 					<>
-						<h2>Genre: </h2>
+						<h2>Genre: {genreName} </h2>
 						<div className='list-group'>
 							{movies.map((movie) => (
 								<Link key={movie.id} to={`/movies/${movie.id}`} className='list-group-item list-group-item-action'>
