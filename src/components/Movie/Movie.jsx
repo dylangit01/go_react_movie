@@ -1,5 +1,4 @@
 // Using class component and lifecycle method:
-import { findByLabelText } from '@testing-library/react';
 import React, { Component } from 'react';
 
 class Movie extends Component {
