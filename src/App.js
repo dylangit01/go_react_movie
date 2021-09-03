@@ -31,7 +31,8 @@ export default function App() {
 									<Link to='/genres'>Genres</Link>
 								</li>
 								<li className='list-group-item'>
-									<Link to='/admin/add'>Add movie</Link>
+									{/* when id === 0, which is the default state.id value in EditMovie.jsx, meaning we add a movie, if id !== 0, we edit the movie */}
+									<Link to='/admin/movie/0'>Add movie</Link>
 								</li>
 								<li className='list-group-item'>
 									<Link to='/admin'>Manage Catalogue</Link>
@@ -47,7 +48,7 @@ export default function App() {
 							<Route exact path='/movies'><Movies /></Route>
 							<Route exact path='/movies/:id' render={(props) => <Movie {...props} />} />
 							<Route exact path='/admin'><Admin /></Route>
-							<Route exact path='/admin/add' render={(props) => <EditMovie {...props} />} />
+							<Route exact path='/admin/movie/:id' render={(props) => <EditMovie {...props} />} />
 							<Route exact path='/'><Home /></Route>
 						</Switch>
 					</div>

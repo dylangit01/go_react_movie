@@ -1,5 +1,6 @@
 // Using class component and lifecycle method:
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Movie extends Component {
 	state = {
@@ -36,6 +37,7 @@ class Movie extends Component {
 
 	render() {
 		const { movie, isLoading, error } = this.state;
+		const id = this.props.match.params.id;
 		movie.genres ? (movie.genres = Object.values(movie.genres)) : (movie.genres = []);
 
 		if (error) return <h3>Error: {error.message}</h3>;
@@ -87,6 +89,9 @@ class Movie extends Component {
 								</tr>
 							</tbody>
 						</table>
+						<Link to={`/admin/movie/${id}`}>
+							<button className='btn btn-outline-secondary px-5'>Edit</button>
+						</Link>
 					</div>
 				)}
 			</>

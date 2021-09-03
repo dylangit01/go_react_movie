@@ -26,11 +26,44 @@ export default class EditMovie extends Component {
 		],
 	};
 
-	componentDidMount() {}
+	componentDidMount() {
+		const id = this.props.match.params.id;
+		if (id > 0) {
+			fetch(`http://localhost:4000/v1/movie/${id}`)
+				.then((res) => {
+					if (res.status !== '200') {
+						const err = new Error();
+						err.message = `Invalid response code: ${res.status}`;
+						this.setState({ error: err });
+					}
+					return res.json();
+				})
+				.then((data) => {
+					const releaseDate = new Date(data.movie.release_date);
+					const { id, title, runtime, mpaa_rating, rating, description } = data.movie;
+					this.setState(
+						{
+							movie: {
+								id,
+								title,
+								release_date: releaseDate.toISOString().split('T')[0],
+								runtime,
+								mpaa_rating,
+								rating,
+								description,
+							},
+							isLoading: false,
+						},
+						(error) => this.setState({ isLoading: false, error })
+					);
+				});
+		} else {
+			this.setState({ isLoading: false });
+		}
+	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-		console.log('XXXXXXXXXXX');
 	};
 
 	handleChange = (e) => {
@@ -44,49 +77,63 @@ export default class EditMovie extends Component {
 	};
 
 	render() {
-		let { movie } = this.state;
+		let { movie, isLoading, error } = this.state;
+
+		if (error) return <h3>Error: {error.message}</h3>;
+
 		return (
 			<>
-				<h2>Add/Edit Movie</h2>
-				<hr />
-				<form onSubmit={this.handleSubmit}>
-					<input type='hidden' name='id' id='id' value={movie.id} onChange={this.handleChange} />
+				{isLoading ? (
+					<h3>Loading...</h3>
+				) : (
+					<>
+						<h2>Add/Edit Movie</h2>
+						<hr />
+						<form onSubmit={this.handleSubmit}>
+							<input type='hidden' name='id' id='id' value={movie.id} onChange={this.handleChange} />
 
-					<Input title='Title' type='text' name='title' value={movie.title} handleChange={this.handleChange} />
+							<Input title='Title' type='text' name='title' value={movie.title} handleChange={this.handleChange} />
 
-					<Input
-						title='Release Date'
-						type='date'
-						name='release_date'
-						value={movie.release_date}
-						handleChange={this.handleChange}
-					/>
+							<Input
+								title='Release Date'
+								type='date'
+								name='release_date'
+								value={movie.release_date}
+								handleChange={this.handleChange}
+							/>
 
-					<Input title='Runtime' type='text' name='runtime' value={movie.runtime} handleChange={this.handleChange} />
+							<Input
+								title='Runtime'
+								type='text'
+								name='runtime'
+								value={movie.runtime}
+								handleChange={this.handleChange}
+							/>
 
-					<SelectOption
-						name='mpaa_rating'
-						title='MPAA Rating'
-						value={movie.mpaa_rating}
-						handleChange={this.handleChange}
-						placeholder='Choose...'
-						options={this.state.mpaaOptions}
-					/>
+							<SelectOption
+								name='mpaa_rating'
+								title='MPAA Rating'
+								value={movie.mpaa_rating}
+								handleChange={this.handleChange}
+								placeholder='Choose...'
+								options={this.state.mpaaOptions}
+							/>
 
-					<Input title='Rating' type='text' name='rating' value={movie.rating} handleChange={this.handleChange} />
+							<Input title='Rating' type='text' name='rating' value={movie.rating} handleChange={this.handleChange} />
 
-					<Textarea
-						title='Description'
-						name='description'
-						value={movie.description}
-						handleChange={this.handleChange}
-						rows='3'
-					/>
+							<Textarea
+								title='Description'
+								name='description'
+								value={movie.description}
+								handleChange={this.handleChange}
+								rows='3'
+							/>
 
-					<hr />
-					<button className='btn btn-outline-primary'>Add A Movie</button>
-				</form>
-
+							<hr />
+							<button className='btn btn-outline-primary'>{this.state.movie.id > 0 ? 'Edit' : 'Add'} Movie</button>
+						</form>
+					</>
+				)}
 				<div className='mt-3'>
 					<pre>{JSON.stringify(this.state, null, 3)}</pre>
 				</div>
