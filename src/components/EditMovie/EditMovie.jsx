@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from '../Alert/Alert';
 import './EditMovie.css';
 import Input from './Input/Input';
 import SelectOption from './Input/SelectOption';
@@ -17,10 +18,6 @@ export default class EditMovie extends Component {
 			rating: '',
 			description: '',
 		},
-		isLoading: true,
-		error: null,
-		errors: [], // --> for form validation
-		
 		mpaaOptions: [
 			{ id: 'G', value: 'G' },
 			{ id: 'PG', value: 'PG' },
@@ -28,6 +25,13 @@ export default class EditMovie extends Component {
 			{ id: 'R', value: 'R' },
 			{ id: 'NV17', value: 'NV17' },
 		],
+		isLoading: true,
+		error: null,
+		errors: [], // --> for form validation
+		alert: {
+			type: 'd-none',
+			message: '',
+		},
 	};
 
 	componentDidMount() {
@@ -91,7 +95,15 @@ export default class EditMovie extends Component {
 				body: JSON.stringify(data),
 			});
 			const dataFromServer = await res.json();
-			console.log(dataFromServer);
+			if (dataFromServer.error) {
+				this.setState({
+					alert: { type: 'alert-danger', message: dataFromServer.error.message },
+				});
+			} else {
+				this.setState({
+					alert: { type: 'alert-success', message: 'Changes saved!' },
+				});
+			}
 		};
 		addMovie(payload);
 	};
@@ -111,7 +123,7 @@ export default class EditMovie extends Component {
 	};
 
 	render() {
-		let { movie, isLoading, error } = this.state;
+		let { movie, isLoading, error, alert } = this.state;
 
 		if (error) return <h3>Error: {error.message}</h3>;
 
@@ -122,6 +134,7 @@ export default class EditMovie extends Component {
 				) : (
 					<>
 						<h2>Add/Edit Movie</h2>
+						<Alert alert={alert} />
 						<hr />
 						<form onSubmit={this.handleSubmit}>
 							<input type='hidden' name='id' id='id' value={movie.id} onChange={this.handleChange} />
@@ -195,9 +208,6 @@ export default class EditMovie extends Component {
 						</form>
 					</>
 				)}
-				<div className='mt-3'>
-					<pre>{JSON.stringify(this.state, null, 3)}</pre>
-				</div>
 			</>
 		);
 	}
