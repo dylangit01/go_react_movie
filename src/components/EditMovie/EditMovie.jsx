@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './EditMovie.css';
 import Input from './Input/Input';
+import SelectOption from './Input/SelectOption';
 import Textarea from './Input/Textarea';
 
 export default class EditMovie extends Component {
@@ -16,6 +17,13 @@ export default class EditMovie extends Component {
 		},
 		isLoading: true,
 		error: null,
+		mpaaOptions: [
+			{ id: 'G', value: 'G' },
+			{ id: 'PG', value: 'PG' },
+			{ id: 'PG13', value: 'PG13' },
+			{ id: 'R', value: 'R' },
+			{ id: 'NV17', value: 'NV17' },
+		],
 	};
 
 	componentDidMount() {}
@@ -56,39 +64,24 @@ export default class EditMovie extends Component {
 
 					<Input title='Runtime' type='text' name='runtime' value={movie.runtime} handleChange={this.handleChange} />
 
-					<div className='mb-3'>
-						<label htmlFor='mpaa_rating' className='form-label'>
-							MPAA Rating
-						</label>
-						<select
-							className='form-select'
-							name='mpaa_rating'
-							id='mpaa_rating'
-							value={movie.mpaa_rating}
-							onChange={this.handleChange}
-						>
-							<option className='form-select'>Choose...</option>
-							<option className='form-select' value='G'>
-								G
-							</option>
-							<option className='form-select' value='PG'>
-								PG
-							</option>
-							<option className='form-select' value='PG13'>
-								PG13
-							</option>
-							<option className='form-select' value='R'>
-								R
-							</option>
-							<option className='form-select' value='NV17'>
-								NV17
-							</option>
-						</select>
-					</div>
+					<SelectOption
+						name='mpaa_rating'
+						title='MPAA Rating'
+						value={movie.mpaa_rating}
+						handleChange={this.handleChange}
+						placeholder='Choose...'
+						options={this.state.mpaaOptions}
+					/>
 
 					<Input title='Rating' type='text' name='rating' value={movie.rating} handleChange={this.handleChange} />
 
-					<Textarea title='Description' name='description' value={movie.description} handleChange={this.handleChange} rows='3' />
+					<Textarea
+						title='Description'
+						name='description'
+						value={movie.description}
+						handleChange={this.handleChange}
+						rows='3'
+					/>
 
 					<hr />
 					<button className='btn btn-outline-primary'>Add A Movie</button>
