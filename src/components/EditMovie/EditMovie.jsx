@@ -4,6 +4,8 @@ import Input from './Input/Input';
 import SelectOption from './Input/SelectOption';
 import Textarea from './Input/Textarea';
 
+const ENDPOINT = 'http://localhost:4000/v1';
+
 export default class EditMovie extends Component {
 	state = {
 		movie: {
@@ -29,7 +31,7 @@ export default class EditMovie extends Component {
 	componentDidMount() {
 		const id = this.props.match.params.id;
 		if (id > 0) {
-			fetch(`http://localhost:4000/v1/movie/${id}`)
+			fetch(`${ENDPOINT}/movie/${id}`)
 				.then((res) => {
 					if (res.status !== '200') {
 						const err = new Error();
@@ -64,6 +66,20 @@ export default class EditMovie extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
+
+		// const formData = new FormData(e.target);
+		// const payload = Object.fromEntries(formData.entries());
+
+		const formData = this.state.movie;
+		const addMovie = async (data) => {
+			const res = await fetch(`${ENDPOINT}/admin/editmovie`, {
+				method: 'POST',
+				body: JSON.stringify(data),
+			});
+			const dataFromServer = await res.json();
+			console.log(dataFromServer);
+		};
+		addMovie(formData);
 	};
 
 	handleChange = (e) => {
