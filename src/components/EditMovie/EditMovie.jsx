@@ -20,6 +20,7 @@ export default class EditMovie extends Component {
 		isLoading: true,
 		error: null,
 		errors: [], // --> for form validation
+		
 		mpaaOptions: [
 			{ id: 'G', value: 'G' },
 			{ id: 'PG', value: 'PG' },
@@ -72,18 +73,18 @@ export default class EditMovie extends Component {
 		// form validation
 		let errors = [];
 		if (title === '') errors.push('title');
-		if (release_date === '') errors.push('release_date');
-		if (runtime === '') errors.push('runtime');
-		if (mpaa_rating === '') errors.push('mpaa_rating');
-		if (rating === '') errors.push('rating');
+		// if (release_date === '') errors.push('release_date');
+		// if (runtime === '') errors.push('runtime');
+		// if (mpaa_rating === '') errors.push('mpaa_rating');
+		// if (rating === '') errors.push('rating');
 
 		this.setState({ errors });
 		if (errors.length > 0) return false;
 
-		// const formData = new FormData(e.target);
-		// const payload = Object.fromEntries(formData.entries());
+		// const formData = this.state.movie; --> id is not string, so will have error from backend
+		const formData = new FormData(e.target);
+		const payload = Object.fromEntries(formData.entries());
 
-		const formData = this.state.movie;
 		const addMovie = async (data) => {
 			const res = await fetch(`${ENDPOINT}/admin/editmovie`, {
 				method: 'POST',
@@ -92,7 +93,7 @@ export default class EditMovie extends Component {
 			const dataFromServer = await res.json();
 			console.log(dataFromServer);
 		};
-		addMovie(formData);
+		addMovie(payload);
 	};
 
 	handleChange = (e) => {
