@@ -96,13 +96,23 @@ export default class EditMovie extends Component {
 			});
 			const dataFromServer = await res.json();
 			if (dataFromServer.error) {
-				this.setState({
-					alert: { type: 'alert-danger', message: dataFromServer.error.message },
-				});
+				this.setState(
+					{
+						alert: { type: 'alert-danger', message: dataFromServer.error.message },
+					},
+					() => {
+						setTimeout(() => this.setState({ alert: { type: 'd-none' } }), 2000);
+					}
+				);
 			} else {
-				this.setState({
-					alert: { type: 'alert-success', message: 'Changes saved!' },
-				});
+				this.setState(
+					{
+						alert: { type: 'alert-success', message: 'Changes saved!' },
+					},
+					() => {
+						setTimeout(() => this.setState({ alert: {type: 'd-none'} }), 2000);
+					}
+				);
 			}
 		};
 		addMovie(payload);
@@ -204,7 +214,7 @@ export default class EditMovie extends Component {
 							/>
 
 							<hr />
-							<button className='btn btn-outline-primary'>{this.state.movie.id > 0 ? 'Edit' : 'Add'} Movie</button>
+							<button type='submit' className='btn btn-outline-primary'>{this.state.movie.id > 0 ? 'Edit' : 'Add'} Movie</button>
 						</form>
 					</>
 				)}

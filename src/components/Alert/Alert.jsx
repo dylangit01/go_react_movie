@@ -1,6 +1,5 @@
-import React from 'react';
-
 const Alert = ({ alert }) => {
+
 	return (
 		<div className={`alert ${alert.type}`} role='alert'>
 			{alert.message}
