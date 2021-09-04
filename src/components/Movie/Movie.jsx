@@ -89,8 +89,8 @@ class Movie extends Component {
 								</tr>
 							</tbody>
 						</table>
-						<Link to={`/admin/movie/${id}`}>
-							<button className='btn btn-outline-secondary px-5'>Edit</button>
+						<Link className='btn btn-outline-secondary px-5' to={`/admin/movie/${id}`}>
+							Edit
 						</Link>
 					</div>
 				)}

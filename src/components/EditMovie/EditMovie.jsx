@@ -117,6 +117,7 @@ export default class EditMovie extends Component {
 						setTimeout(() => this.setState({ alert: { type: 'd-none' } }), 2000);
 					}
 				);
+				// this.props.history.push({pathname: "/admin"})
 			}
 		};
 		addMovie(payload);
