@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Alert from '../Alert/Alert';
 import './EditMovie.css';
 import Input from './Input/Input';
 import SelectOption from './Input/SelectOption';
 import Textarea from './Input/Textarea';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const ENDPOINT = 'http://localhost:4000/v1';
 
@@ -66,6 +69,7 @@ export default class EditMovie extends Component {
 					);
 				});
 		} else {
+			// console.log(this.props.match.params.id);
 			this.setState({ isLoading: false });
 		}
 	}
@@ -77,10 +81,10 @@ export default class EditMovie extends Component {
 		// form validation
 		let errors = [];
 		if (title === '') errors.push('title');
-		// if (release_date === '') errors.push('release_date');
-		// if (runtime === '') errors.push('runtime');
-		// if (mpaa_rating === '') errors.push('mpaa_rating');
-		// if (rating === '') errors.push('rating');
+		if (release_date === '') errors.push('release_date');
+		if (runtime === '') errors.push('runtime');
+		if (mpaa_rating === '') errors.push('mpaa_rating');
+		if (rating === '') errors.push('rating');
 
 		this.setState({ errors });
 		if (errors.length > 0) return false;
@@ -110,7 +114,7 @@ export default class EditMovie extends Component {
 						alert: { type: 'alert-success', message: 'Changes saved!' },
 					},
 					() => {
-						setTimeout(() => this.setState({ alert: {type: 'd-none'} }), 2000);
+						setTimeout(() => this.setState({ alert: { type: 'd-none' } }), 2000);
 					}
 				);
 			}
@@ -130,6 +134,23 @@ export default class EditMovie extends Component {
 
 	hasError = (inputField) => {
 		return this.state.errors.indexOf(inputField) !== -1;
+	};
+
+	confirmDelete = async (id) => {
+		confirmAlert({
+			title: 'Delete Movie?',
+			message: 'Are you sure?',
+			buttons: [
+				{
+					label: 'Yes',
+					onClick: () => alert('Click Yes'),
+				},
+				{
+					label: 'No',
+					onClick: () => {},
+				},
+			],
+		});
 	};
 
 	render() {
@@ -213,8 +234,27 @@ export default class EditMovie extends Component {
 								rows='3'
 							/>
 
-							<hr />
-							<button type='submit' className='btn btn-outline-primary'>{this.state.movie.id > 0 ? 'Edit' : 'Add'} Movie</button>
+							<div className='d-flex justify-content-between'>
+								<div>
+									<button type='submit' className='btn btn-outline-primary'>
+										{this.state.movie.id > 0 ? 'Edit' : 'Add'} Movie
+									</button>
+									<Link className='btn btn-warning ms-1' to='/admin'>
+										Cancel
+									</Link>
+								</div>
+								{movie.id > 0 && (
+									<a
+										href='#!'
+										onClick={() => {
+											this.confirmDelete(movie.id);
+										}}
+										className='btn btn-danger ms-1'
+									>
+										Delete
+									</a>
+								)}
+							</div>
 						</form>
 					</>
 				)}
