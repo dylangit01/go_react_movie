@@ -143,7 +143,26 @@ export default class EditMovie extends Component {
 			buttons: [
 				{
 					label: 'Yes',
-					onClick: () => alert('Click Yes'),
+					onClick: () => {
+						fetch(`${ENDPOINT}/admin/deletemovie/${id}`, { method: 'GET' })
+							.then((res) => res.json())
+							.then((data) => {
+								if (data.error) {
+									this.setState(
+										{
+											alert: { type: 'alert-danger', message: data.error.message },
+										},
+										() => {
+											setTimeout(() => this.setState({ alert: { type: 'd-none' } }), 2000);
+										}
+									);
+								} else {
+									this.props.history.push({
+										pathname:"/admin"
+									})
+								}
+							});
+					},
 				},
 				{
 					label: 'No',
