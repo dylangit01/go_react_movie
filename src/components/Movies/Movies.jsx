@@ -31,6 +31,26 @@ export class Movies extends Component {
 	// 	}
 	// };
 
+	// fetchMovieUsingAsyncAwait = async () => {
+	// 	const URL = 'http://localhost:4000/v1/movies';
+	// 	try {
+	// 		const res = await fetch(URL);
+	// 		if (res.state !== '200') {
+	// 			throw new Error('Something went wrong');
+	// 		}
+	// 		const data = res.json();
+	// 		this.setState({
+	// 			movies: data.movies,
+	// 			isLoading: false,
+	// 		});
+	// 	} catch (error) {
+	// 		this.setState({
+	// 			error,
+	// 			isLoading: false,
+	// 		});
+	// 	}
+	// };
+
 	fetchAllMovies = () => {
 		fetch('http://localhost:4000/v1/movies')
 			.then((res) => {
